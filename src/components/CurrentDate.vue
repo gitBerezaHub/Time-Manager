@@ -1,10 +1,10 @@
 <template>
   <div class="current-date-content">
-    <h1>{{ date }}</h1>
+    <p>{{ day }} {{ monthList[new Date().getMonth()] }}</p>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -12,7 +12,22 @@ export default defineComponent({
 
   data() {
     return {
-      date: new Date().toJSON().split("T")[0],
+      day: new Date().getDate(),
+      monthNum: new Date().getMonth(),
+      monthList: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
     };
   },
 });
@@ -21,18 +36,14 @@ export default defineComponent({
 <style scoped lang="scss">
 .current-date-content {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #008000;
-  box-shadow: 0 10px 5px #006000;
-  border-radius: 0 0 16px 16px;
-  height: 40px;
-  width: 100vw;
+  margin-top: 4vh;
 
-  h1 {
+  p {
     text-align: center;
-    font-size: 22px;
+    font-size: 64px;
+    color: #244782;
   }
 }
 </style>

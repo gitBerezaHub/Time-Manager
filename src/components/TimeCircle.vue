@@ -1,7 +1,7 @@
 <template>
   <div class="time-circle-content">
     <div class="circle" @click="addHour()">
-      <h1>{{ hours }}</h1>
+      <h1>{{ hours }}H</h1>
       <p>worked</p>
     </div>
   </div>
@@ -20,8 +20,13 @@ export default defineComponent({
   },
 
   methods: {
-    addHour: function () {
-      this.hours++;
+    addHour() {
+      if (this.hours < 24) {
+        this.hours++;
+      }
+    },
+    resetHours() {
+      this.hours = 0;
     },
   },
 });
@@ -29,17 +34,19 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .time-circle-content {
-  display: flex;
-  justify-content: center;
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: flex-end;
 }
+
 .circle {
   width: 50vw;
   height: 50vw;
   max-width: 250px;
   max-height: 250px;
-  background-color: #3d9971;
-  border: 20px solid #fff;
-  margin-top: 24px;
+  background-color: #fff;
+  border: 10px solid #72afd2;
+  margin-top: 9vh;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -47,8 +54,11 @@ export default defineComponent({
   justify-content: center;
   user-select: none;
 }
-
+h1 {
+  font-size: 64px;
+}
 p {
+  font-size: 32px;
   margin-top: 10px;
 }
 </style>

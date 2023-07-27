@@ -9,8 +9,7 @@ body {
   flex-direction: column;
   align-items: center;
   font-family: "Manrope", sans-serif;
-  background-color: #3d9971;
-  color: #fff;
+  background-color: #bfe0f3;
   height: 100%;
 }
 .content {
