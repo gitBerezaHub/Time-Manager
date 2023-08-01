@@ -52,4 +52,10 @@ export default defineComponent({
   transform-origin: 100% 100%;
   transform: skewY(-5deg);
 }
+
+@media screen and (min-width: 800px) {
+  .bottom-sand:before {
+    transform: skewY(-2deg);
+  }
+}
 </style>
