@@ -1,6 +1,11 @@
 <template>
   <div class="time-circle-content">
-    <div class="circle" @click="addHour()">
+    <div
+      class="circle"
+      @click="addHour()"
+      @pointerdown="pointerDown()"
+      @pointerup="pointerUp()"
+    >
       <h1>{{ hours }}H</h1>
       <p>worked</p>
     </div>
@@ -16,6 +21,8 @@ export default defineComponent({
   data() {
     return {
       hours: 0,
+      dateDown: 0,
+      dateUp: 0,
     };
   },
 
@@ -25,8 +32,14 @@ export default defineComponent({
         this.hours++;
       }
     },
-    resetHours() {
-      this.hours = 0;
+    pointerDown() {
+      this.dateDown = Math.floor(Date.now() / 1000);
+    },
+    pointerUp() {
+      this.dateUp = Math.floor(Date.now() / 1000);
+      if (this.dateUp - this.dateDown >= 2) {
+        this.hours = -1;
+      }
     },
   },
 });
