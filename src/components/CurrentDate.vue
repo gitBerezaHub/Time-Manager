@@ -44,6 +44,8 @@ export default defineComponent({
     text-align: center;
     font-size: 64px;
     color: #244782;
+    user-select: none;
+    font-weight: 300;
   }
 }
 </style>
