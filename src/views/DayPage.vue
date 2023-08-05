@@ -14,14 +14,10 @@ import TimeCircle from "@/components/TimeCircle.vue";
 import DescriptionField from "@/components/DescriptionField.vue";
 
 export default defineComponent({
-  name: "CertainDayPage",
+  name: "DayPage",
   components: { DescriptionField, TimeCircle, CurrentDate },
   data() {
-    return {
-      windowHeight: window.innerHeight,
-      windowWidth: window.innerWidth,
-      sandIncline: Math.asin(this.windowWidth / (0.24 * this.windowHeight) / 6),
-    };
+    return {};
   },
 });
 </script>
