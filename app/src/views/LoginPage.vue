@@ -5,23 +5,43 @@
       <polygon points="" id="poly" fill="#fff" />
     </svg>
     <div class="input-container">
-      <input class="login-input" placeholder="account" />
+      <input class="login-input" placeholder="account" v-model="username" />
       <input class="login-input" type="password" placeholder="password" />
     </div>
-    <button class="login-button">login</button>
+    <button class="login-button" @click="findUserId()">login</button>
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "LoginPage",
+  data() {
+    return {
+      username: "",
+    };
+  },
   methods: {
     setPolySize() {
       let points = `0, 40 0, ${window.innerHeight} ${window.innerWidth}, ${window.innerHeight} ${window.innerWidth}, 0`;
       let poly = document.getElementById("poly");
       poly.setAttribute("points", points);
+    },
+    async findUserId() {
+      console.log("W", this.$store.state.API_URL + "/users");
+      let users = await axios.get(this.$store.state.API_URL + "/users");
+      console.log(users);
+      for (let i = 0; i < 2; i++) {
+        let user = users[i];
+        if (this.username === user.username) {
+          this.$store.commit("setUserID", user.user_id);
+          console.log("S");
+        } else {
+          console.log("E");
+        }
+      }
     },
   },
   mounted() {
