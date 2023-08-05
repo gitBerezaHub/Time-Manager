@@ -12,12 +12,37 @@ import { defineComponent } from "vue";
 import CurrentDate from "@/components/CurrentDate.vue";
 import TimeCircle from "@/components/TimeCircle.vue";
 import DescriptionField from "@/components/DescriptionField.vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "DayPage",
   components: { DescriptionField, TimeCircle, CurrentDate },
   data() {
-    return {};
+    return {
+      date: this.$route.params.date,
+    };
+  },
+
+  methods: {
+    async getDayData() {
+      axios.post(
+        this.$store.state.API_URL +
+          "/" +
+          this.$store.state.userID +
+          "/" +
+          this.date,
+        { minutes: 0, text: "" }
+      );
+    },
+  },
+
+  beforeCreate() {
+    if (this.$store.state.userID === null) {
+      this.$router.push("/login");
+    }
+  },
+  async beforeMount() {
+    await this.getDayData();
   },
 });
 </script>

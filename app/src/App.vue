@@ -2,6 +2,18 @@
   <router-view class="content" />
 </template>
 
+<script>
+export default {
+  name: "App",
+  beforeCreate() {
+    this.$store.commit("initialiseVars");
+  },
+  beforeMount() {
+    document.title = "Time Manager";
+  },
+};
+</script>
+
 <style lang="scss">
 @import "src/assets/reset-styles";
 

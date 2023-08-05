@@ -21,6 +21,7 @@ export default defineComponent({
   data() {
     return {
       username: "",
+      date: new Date(),
     };
   },
   methods: {
@@ -30,18 +31,27 @@ export default defineComponent({
       poly.setAttribute("points", points);
     },
     async findUserId() {
-      console.log("W", this.$store.state.API_URL + "/users");
       let users = await axios.get(this.$store.state.API_URL + "/users");
-      console.log(users);
-      for (let i = 0; i < 2; i++) {
-        let user = users[i];
+      for (let i = 0; i < users.data.length; i++) {
+        let user = users.data[i];
         if (this.username === user.username) {
-          this.$store.commit("setUserID", user.user_id);
-          console.log("S");
-        } else {
-          console.log("E");
+          this.$store.commit("setUserID", user.id);
+          let ISODate = this.formatDate();
+          this.$router.push(`/${ISODate}`);
         }
       }
+    },
+    formatDate() {
+      let day = this.date.getDate();
+      let month = this.date.getMonth() + 1;
+      let year = this.date.getFullYear();
+      if (day < 10) {
+        day = `0${day}`;
+      }
+      if (month < 10) {
+        month = `0${month}`;
+      }
+      return `${year}-${month}-${day}`;
     },
   },
   mounted() {

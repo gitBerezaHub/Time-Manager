@@ -3,7 +3,7 @@ import DayPage from "@/views/DayPage.vue";
 import LoginPage from "@/views/LoginPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
-  { path: "/", component: DayPage },
+  { path: "/:date", component: DayPage },
   { path: "/login", component: LoginPage },
 ];
 
