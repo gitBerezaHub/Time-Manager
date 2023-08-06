@@ -9,6 +9,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "TimeCircle",
@@ -19,7 +20,6 @@ export default defineComponent({
       timer: -1,
     };
   },
-
   methods: {
     pointerDown() {
       this.timer = Math.floor(new Date().getTime());
@@ -40,6 +40,17 @@ export default defineComponent({
       if (this.timer && new Date().getTime() - this.timer >= 800) {
         this.hours = 0;
       }
+    },
+
+    async hours() {
+      await axios.patch(
+        this.$store.state.API_URL +
+          "/" +
+          this.$store.state.userID +
+          "/" +
+          this.$route.params.date,
+        { minutes: this.hours * 60, text: "" }
+      );
     },
   },
 });
