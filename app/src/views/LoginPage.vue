@@ -1,10 +1,10 @@
 <template>
-  <div class="login-container">
+  <div class="content">
     <p class="login-label" @click="setPolySize()">Login</p>
     <svg class="background-poly">
       <polygon points="" id="poly" fill="#fff" />
     </svg>
-    <div class="input-container">
+    <div class="container">
       <input class="login-input" placeholder="account" v-model="username" />
       <input class="login-input" type="password" placeholder="password" />
     </div>
@@ -65,13 +65,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.login-container {
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.input-container {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;

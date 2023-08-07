@@ -1,10 +1,14 @@
 <template>
-  <current-date></current-date>
+  <current-date @click="isTextareaShow = false"></current-date>
   <time-circle></time-circle>
-  <description-field></description-field>
-  <div class="sand-container">
+  <div
+    class="sand-container"
+    @click="isTextareaShow = true"
+    v-if="!isTextareaShow"
+  >
     <div class="bottom-sand"></div>
   </div>
+  <description-field v-else description-field></description-field>
 </template>
 
 <script>
@@ -20,6 +24,7 @@ export default defineComponent({
   data() {
     return {
       date: this.$route.params.date,
+      isTextareaShow: false,
     };
   },
 
