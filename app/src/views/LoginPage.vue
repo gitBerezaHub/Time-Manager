@@ -5,8 +5,22 @@
       <polygon points="" id="poly" fill="#fff" />
     </svg>
     <div class="container">
-      <input class="login-input" placeholder="account" v-model="username" />
-      <input class="login-input" type="password" placeholder="password" />
+      <input
+        class="login-input"
+        :class="{ 'login-input__error': accountError || loginError }"
+        placeholder="account"
+        v-model="username"
+      />
+      <p v-if="accountError" style="color: #d90e0e">{{ accountError }}</p>
+      <input
+        class="login-input"
+        :class="{ 'login-input__error': passwordError || loginError }"
+        type="password"
+        placeholder="password"
+        v-model="password"
+      />
+      <p v-if="passwordError" style="color: #d90e0e">{{ passwordError }}</p>
+      <p v-if="loginError" style="color: #d90e0e">{{ loginError }}</p>
     </div>
     <button class="login-button" @click="findUserId()">login</button>
   </div>
@@ -21,6 +35,10 @@ export default defineComponent({
   data() {
     return {
       username: "",
+      password: "",
+      accountError: "",
+      passwordError: "",
+      loginError: "",
     };
   },
   methods: {
@@ -30,6 +48,12 @@ export default defineComponent({
       poly.setAttribute("points", points);
     },
     async findUserId() {
+      let checkedAccount = this.checkAccountField();
+      let checkedPassword = this.checkPasswordField();
+      if (checkedAccount || checkedPassword) {
+        return;
+      }
+
       let users = await axios.get(this.$store.state.API_URL + "/users");
       for (let i = 0; i < users.data.length; i++) {
         let user = users.data[i];
@@ -37,8 +61,38 @@ export default defineComponent({
           this.$store.commit("setUserID", user.id);
           this.$store.commit("formatDate");
           this.$router.push(`/${this.$store.state.date}`);
+        } else {
+          this.loginError = "Incorrect account or password";
         }
       }
+    },
+    checkAccountField() {
+      this.accountError = "";
+      this.loginError = "";
+
+      if (this.username === "") {
+        this.accountError = "Empty account field";
+      }
+
+      return this.accountError;
+    },
+
+    checkPasswordField() {
+      this.passwordError = "";
+      this.loginError = "";
+
+      if (this.password === "") {
+        this.passwordError = "Empty password field";
+      }
+      return this.passwordError;
+    },
+  },
+  watch: {
+    username() {
+      this.checkAccountField();
+    },
+    password() {
+      this.checkPasswordField();
     },
   },
   mounted() {
@@ -85,6 +139,15 @@ export default defineComponent({
     color: #afb8c7;
     font-weight: 300;
     text-align: center;
+  }
+
+  &__error {
+    color: #d90e0e;
+    border-color: #d90e0e;
+
+    &::placeholder {
+      color: #ec9e9e;
+    }
   }
 }
 

@@ -8,7 +8,7 @@
   >
     <div class="bottom-sand"></div>
   </div>
-  <description-field v-else description-field></description-field>
+  <description-field v-else></description-field>
 </template>
 
 <script>
