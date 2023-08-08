@@ -21,7 +21,6 @@ export default defineComponent({
   data() {
     return {
       username: "",
-      date: new Date(),
     };
   },
   methods: {
@@ -36,22 +35,10 @@ export default defineComponent({
         let user = users.data[i];
         if (this.username === user.username) {
           this.$store.commit("setUserID", user.id);
-          let ISODate = this.formatDate();
-          this.$router.push(`/${ISODate}`);
+          this.$store.commit("formatDate");
+          this.$router.push(`/${this.$store.state.date}`);
         }
       }
-    },
-    formatDate() {
-      let day = this.date.getDate();
-      let month = this.date.getMonth() + 1;
-      let year = this.date.getFullYear();
-      if (day < 10) {
-        day = `0${day}`;
-      }
-      if (month < 10) {
-        month = `0${month}`;
-      }
-      return `${year}-${month}-${day}`;
     },
   },
   mounted() {

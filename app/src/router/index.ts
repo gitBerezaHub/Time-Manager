@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import DayPage from "@/views/DayPage.vue";
-import LoginPage from "@/views/LoginPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
-  { path: "/:date", component: DayPage },
-  { path: "/login", component: LoginPage },
+  {
+    path: "/:date",
+    component: () => import("@/views/DayPage.vue"),
+  },
+  {
+    path: "/login",
+    component: () => import("@/views/LoginPage.vue"),
+  },
 ];
 
 const router = createRouter({

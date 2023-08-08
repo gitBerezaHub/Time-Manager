@@ -5,11 +5,23 @@
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      date: "",
+    };
+  },
   beforeCreate() {
     this.$store.commit("initialiseVars");
   },
   beforeMount() {
     document.title = "Time Manager";
+
+    if (this.$store.state.userID === null) {
+      this.$router.push("/login");
+    } else {
+      this.$store.commit("formatDate");
+      this.$router.push(`/${this.$store.state.date}`);
+    }
   },
 };
 </script>
