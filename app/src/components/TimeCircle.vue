@@ -1,7 +1,8 @@
 <template>
   <div class="time-circle-content">
     <div class="circle" @pointerdown="pointerDown()" @pointerup="pointerUp()">
-      <h1>{{ hours }}H</h1>
+      <h1>{{ Math.floor(minutes / 60) }}H</h1>
+      <p v-if="minutes % 60">{{ minutes % 60 }}m</p>
       <p>worked</p>
     </div>
   </div>
@@ -9,22 +10,24 @@
 
 <script>
 import { defineComponent } from "vue";
-import axios from "axios";
 
 export default defineComponent({
   name: "TimeCircle",
 
   data() {
     return {
-      hours: 0,
       timer: -1,
     };
+  },
+  props: {
+    minutes: Number,
+    minutesPerClick: Number,
   },
   methods: {
     pointerDown() {
       this.timer = Math.floor(new Date().getTime());
-      if (this.hours < 24) {
-        this.hours++;
+      if (this.minutes <= 24 * 60 - this.minutesPerClick) {
+        this.$emit("editMinutes", this.minutes + this.minutesPerClick);
       }
     },
     pointerUp() {
@@ -38,19 +41,8 @@ export default defineComponent({
       }
       await new Promise((r) => setTimeout(r, 800));
       if (this.timer && new Date().getTime() - this.timer >= 800) {
-        this.hours = 0;
+        this.$emit("editMinutes", 0);
       }
-    },
-
-    async hours() {
-      await axios.patch(
-        this.$store.state.API_URL +
-          "/" +
-          this.$store.state.userID +
-          "/" +
-          this.$route.params.date,
-        { minutes: this.hours * 60, text: "" }
-      );
     },
   },
 });

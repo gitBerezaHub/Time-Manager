@@ -22,7 +22,9 @@
       <p v-if="passwordError" style="color: #d90e0e">{{ passwordError }}</p>
       <p v-if="loginError" style="color: #d90e0e">{{ loginError }}</p>
     </div>
-    <button class="login-button" @click="findUserId()">login</button>
+    <button class="login-button" id="login-button" @click="findUserId()">
+      login
+    </button>
   </div>
 </template>
 
@@ -51,6 +53,7 @@ export default defineComponent({
       let checkedAccount = this.checkAccountField();
       let checkedPassword = this.checkPasswordField();
       if (checkedAccount || checkedPassword) {
+        this.shakeButton();
         return;
       }
 
@@ -63,6 +66,7 @@ export default defineComponent({
           this.$router.push(`/${this.$store.state.date}`);
         } else {
           this.loginError = "Incorrect account or password";
+          this.shakeButton();
         }
       }
     },
@@ -85,6 +89,18 @@ export default defineComponent({
         this.passwordError = "Empty password field";
       }
       return this.passwordError;
+    },
+
+    removeShakeButton() {
+      let loginButton = document.getElementById("login-button");
+      if (loginButton !== null) {
+        loginButton.classList.remove("shake");
+      }
+    },
+    shakeButton() {
+      let loginButton = document.getElementById("login-button");
+      loginButton.classList.add("shake");
+      setTimeout(this.removeShakeButton, 500);
     },
   },
   watch: {
@@ -169,5 +185,31 @@ export default defineComponent({
   color: #fff;
   border: none;
   border-radius: 50px;
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 </style>

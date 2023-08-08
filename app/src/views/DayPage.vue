@@ -1,6 +1,18 @@
 <template>
+  <button
+    @click="
+      $store.commit('logout');
+      $router.push('/login');
+    "
+  >
+    logout
+  </button>
   <current-date @click="isTextareaShow = false"></current-date>
-  <time-circle></time-circle>
+  <time-circle
+    :minutes="minutes"
+    :minutes-per-click="60"
+    @editMinutes="editMinutes"
+  ></time-circle>
   <div
     class="sand-container"
     @click="isTextareaShow = true"
@@ -25,18 +37,31 @@ export default defineComponent({
     return {
       date: this.$route.params.date,
       isTextareaShow: false,
+      minutes: 0,
     };
   },
 
   methods: {
     async getDayData() {
-      axios.post(
+      let dayNote = await axios.post(
         this.$store.state.API_URL +
           "/" +
           this.$store.state.userID +
           "/" +
           this.date,
         { minutes: 0, text: "" }
+      );
+      this.minutes = dayNote.data.minutes;
+    },
+    async editMinutes(minutes) {
+      this.minutes = minutes;
+      await axios.patch(
+        this.$store.state.API_URL +
+          "/" +
+          this.$store.state.userID +
+          "/" +
+          this.$route.params.date,
+        { minutes: this.minutes, text: "" }
       );
     },
   },

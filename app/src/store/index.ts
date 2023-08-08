@@ -14,6 +14,9 @@ export default createStore({
     setUserID(state, userID) {
       state.userID = userID;
     },
+    logout(state) {
+      state.userID = null;
+    },
     initialiseVars(state) {
       if (localStorage.getItem("userID")) {
         state.userID = JSON.parse(localStorage.userID);
