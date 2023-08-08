@@ -1,7 +1,7 @@
 <template>
   <div class="time-circle-content">
     <div class="circle" @pointerdown="pointerDown()" @pointerup="pointerUp()">
-      <h1>{{ Math.floor(minutes / 60) }}H</h1>
+      <h1>{{ minutes !== null ? Math.floor(minutes / 60) : "-" }}H</h1>
       <p v-if="minutes % 60">{{ minutes % 60 }}m</p>
       <p>worked</p>
     </div>
@@ -20,13 +20,19 @@ export default defineComponent({
     };
   },
   props: {
-    minutes: Number,
+    minutes: { type: Number, required: false },
     minutesPerClick: Number,
   },
   methods: {
     pointerDown() {
+      if (this.minutes === null) {
+        return;
+      }
       this.timer = Math.floor(new Date().getTime());
-      if (this.minutes <= 24 * 60 - this.minutesPerClick) {
+      if (
+        this.minutes !== null &&
+        this.minutes <= 24 * 60 - this.minutesPerClick
+      ) {
         this.$emit("editMinutes", this.minutes + this.minutesPerClick);
       }
     },
@@ -39,8 +45,13 @@ export default defineComponent({
       if (!this.timer) {
         return;
       }
-      await new Promise((r) => setTimeout(r, 800));
-      if (this.timer && new Date().getTime() - this.timer >= 800) {
+      let timeout = 1200;
+      await new Promise((r) => setTimeout(r, timeout));
+      if (
+        this.minutes !== null &&
+        this.timer &&
+        new Date().getTime() - this.timer >= timeout
+      ) {
         this.$emit("editMinutes", 0);
       }
     },
@@ -48,7 +59,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .time-circle-content {
   display: flex;
   justify-content: center;

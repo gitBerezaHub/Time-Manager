@@ -14,9 +14,9 @@
     @editMinutes="editMinutes"
   ></time-circle>
   <div
+    v-if="!isTextareaShow"
     class="sand-container"
     @click="isTextareaShow = true"
-    v-if="!isTextareaShow"
   >
     <div class="bottom-sand"></div>
   </div>
@@ -37,7 +37,7 @@ export default defineComponent({
     return {
       date: this.$route.params.date,
       isTextareaShow: false,
-      minutes: 0,
+      minutes: null,
     };
   },
 
@@ -77,7 +77,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .sand-container {
   position: fixed;
   bottom: 0;
