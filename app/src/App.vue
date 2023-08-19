@@ -16,12 +16,7 @@ export default {
   beforeMount() {
     document.title = "Time Manager";
 
-    if (this.$store.state.userID === null) {
-      this.$router.push("/login");
-    } else {
-      this.$store.commit("formatDate");
-      this.$router.push(`/${this.$store.state.date}`);
-    }
+    this.$router.push("/login");
   },
 };
 </script>

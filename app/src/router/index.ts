@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/:date",
+    path: "/me/:date",
     component: () => import("@/views/DayPage.vue"),
   },
   {

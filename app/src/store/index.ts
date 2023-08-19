@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import axios from "axios";
 
 export default createStore({
   state: {
@@ -6,36 +7,43 @@ export default createStore({
       process.env.VUE_APP_API_URL !== undefined
         ? process.env.VUE_APP_API_URL
         : "/api",
-    userID: null,
-    date: "",
+    token: null,
   },
-  getters: {},
+  getters: {
+    isLogin(state) {
+      return state.token !== null;
+    },
+    isNotLogin(state) {
+      return state.token === null;
+    },
+  },
   mutations: {
-    setUserID(state, userID) {
-      state.userID = userID;
+    login(state, token) {
+      state.token = token;
     },
     logout(state) {
-      state.userID = null;
+      state.token = null;
     },
     initialiseVars(state) {
-      if (localStorage.getItem("userID")) {
-        state.userID = JSON.parse(localStorage.userID);
+      if (localStorage.getItem("time_manager_token")) {
+        state.token = JSON.parse(localStorage.time_manager_token);
+        console.log("Load token = ", state.token);
       }
-    },
-    formatDate(state) {
-      const date: Date = new Date();
-      let day: string | number = date.getDate();
-      let month: string | number = date.getMonth() + 1;
-      const year: string | number = date.getFullYear();
-      if (day < 10) {
-        day = `0${day}`;
-      }
-      if (month < 10) {
-        month = `0${month}`;
-      }
-      state.date = `${year}-${month}-${day}`;
     },
   },
-  actions: {},
+  actions: {
+    async authenticate(context) {
+      try {
+        await axios.get(context.state.API_URL + "/users/me", {
+          headers: { Authorization: context.state.token },
+        });
+      } catch {
+        console.log("Logout");
+        context.commit("logout");
+        return false;
+      }
+      return true;
+    },
+  },
   modules: {},
 });

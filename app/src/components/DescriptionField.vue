@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <svg class="background-poly">
-      <polygon points="" id="poly" fill="#fff" />
+      <polygon id="poly" fill="#fff" points="" />
     </svg>
     <div class="container">
       <h1 class="done">Done</h1>
@@ -16,14 +16,16 @@
 
 <script>
 import { defineComponent } from "vue";
-import axios from "axios";
 
 export default defineComponent({
   name: "DescriptionField",
   data() {
     return {
-      text: "",
+      text: this.default_text,
     };
+  },
+  props: {
+    default_text: { type: String, default: "" },
   },
   methods: {
     setPolySize() {
@@ -34,14 +36,7 @@ export default defineComponent({
   },
   watch: {
     async text() {
-      await axios.patch(
-        this.$store.state.API_URL +
-          "/" +
-          this.$store.state.userID +
-          "/" +
-          this.$route.params.date,
-        { text: this.text }
-      );
+      this.$emit("edit", this.text);
     },
   },
   mounted() {
@@ -54,7 +49,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .content {
   display: flex;
   flex-direction: column;
@@ -65,11 +60,13 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
+
   .done {
     margin-top: 16px;
     font-size: 64px;
     color: #244782;
   }
+
   .description-text {
     border: none;
     height: 25vh;

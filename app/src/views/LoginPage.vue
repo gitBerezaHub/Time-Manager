@@ -2,27 +2,27 @@
   <div class="content">
     <p class="login-label" @click="setPolySize()">Login</p>
     <svg class="background-poly">
-      <polygon points="" id="poly" fill="#fff" />
+      <polygon id="poly" fill="#fff" points="" />
     </svg>
     <div class="container">
       <input
-        class="login-input"
-        :class="{ 'login-input__error': accountError || loginError }"
-        placeholder="account"
         v-model="username"
+        :class="{ 'login-input__error': accountError || loginError }"
+        class="login-input"
+        placeholder="account"
       />
       <p v-if="accountError" style="color: #d90e0e">{{ accountError }}</p>
       <input
-        class="login-input"
-        :class="{ 'login-input__error': passwordError || loginError }"
-        type="password"
-        placeholder="password"
         v-model="password"
+        :class="{ 'login-input__error': passwordError || loginError }"
+        class="login-input"
+        placeholder="password"
+        type="password"
       />
       <p v-if="passwordError" style="color: #d90e0e">{{ passwordError }}</p>
       <p v-if="loginError" style="color: #d90e0e">{{ loginError }}</p>
     </div>
-    <button class="login-button" id="login-button" @click="findUserId()">
+    <button id="login-button" class="login-button" @click="login()">
       login
     </button>
   </div>
@@ -49,26 +49,37 @@ export default defineComponent({
       let poly = document.getElementById("poly");
       poly.setAttribute("points", points);
     },
-    async findUserId() {
+    pushToDayPage() {
+      const date = new Date().toISOString().split("T")[0];
+      this.$router.push("/me/" + date);
+    },
+    async login() {
       let checkedAccount = this.checkAccountField();
       let checkedPassword = this.checkPasswordField();
       if (checkedAccount || checkedPassword) {
         this.shakeButton();
         return;
       }
-
-      let users = await axios.get(this.$store.state.API_URL + "/users");
-      for (let i = 0; i < users.data.length; i++) {
-        let user = users.data[i];
-        if (this.username === user.username) {
-          this.$store.commit("setUserID", user.id);
-          this.$store.commit("formatDate");
-          this.$router.push(`/${this.$store.state.date}`);
-        } else {
-          this.loginError = "Incorrect account or password";
-          this.shakeButton();
-        }
+      let login_data;
+      try {
+        login_data = await axios.post(
+          this.$store.state.API_URL + "/login",
+          {
+            username: this.username,
+            password: this.password,
+          },
+          { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+        );
+      } catch {
+        this.loginError = "Incorrect account or password";
+        this.shakeButton();
+        return;
       }
+      this.$store.commit(
+        "login",
+        login_data.data.token_type + " " + login_data.data.access_token
+      );
+      this.pushToDayPage();
     },
     checkAccountField() {
       this.accountError = "";
@@ -111,6 +122,11 @@ export default defineComponent({
       this.checkPasswordField();
     },
   },
+  beforeMount() {
+    if (this.$store.getters.isLogin) {
+      this.pushToDayPage();
+    }
+  },
   mounted() {
     this.setPolySize();
     window.addEventListener("resize", this.setPolySize);
@@ -121,7 +137,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .content {
   display: flex;
   flex-direction: column;

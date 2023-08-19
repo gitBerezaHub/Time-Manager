@@ -1,12 +1,5 @@
 <template>
-  <button
-    @click="
-      $store.commit('logout');
-      $router.push('/login');
-    "
-  >
-    logout
-  </button>
+  <button @click="logout()">logout</button>
   <current-date @click="isTextareaShow = false"></current-date>
   <time-circle
     :minutes="minutes"
@@ -20,7 +13,11 @@
   >
     <div class="bottom-sand"></div>
   </div>
-  <description-field v-else></description-field>
+  <description-field
+    v-else
+    :default_text="text"
+    @edit="editText"
+  ></description-field>
 </template>
 
 <script>
@@ -38,40 +35,49 @@ export default defineComponent({
       date: this.$route.params.date,
       isTextareaShow: false,
       minutes: null,
+      text: "",
     };
   },
 
   methods: {
+    async logout() {
+      this.$store.commit("logout");
+      this.$router.push("/login");
+    },
     async getDayData() {
-      let dayNote = await axios.post(
-        this.$store.state.API_URL +
-          "/" +
-          this.$store.state.userID +
-          "/" +
-          this.date,
-        { minutes: 0, text: "" }
+      try {
+        let dayNote = await axios.post(
+          this.$store.state.API_URL + "/notes/me/" + this.date,
+          { minutes: 0, text: "" },
+          { headers: { Authorization: this.$store.state.token } }
+        );
+        this.text = dayNote.data.text;
+        this.minutes = dayNote.data.minutes;
+      } catch (e) {
+        console.log("Error on load day data");
+      }
+    },
+    async editText(text) {
+      this.text = text;
+      await axios.patch(
+        this.$store.state.API_URL + "/notes/me/" + this.$route.params.date,
+        { text: this.text },
+        { headers: { Authorization: this.$store.state.token } }
       );
-      this.minutes = dayNote.data.minutes;
     },
     async editMinutes(minutes) {
       this.minutes = minutes;
       await axios.patch(
-        this.$store.state.API_URL +
-          "/" +
-          this.$store.state.userID +
-          "/" +
-          this.$route.params.date,
-        { minutes: this.minutes, text: "" }
+        this.$store.state.API_URL + "/notes/me/" + this.$route.params.date,
+        { minutes: this.minutes },
+        { headers: { Authorization: this.$store.state.token } }
       );
     },
   },
-
-  beforeCreate() {
-    if (this.$store.state.userID === null) {
+  async beforeMount() {
+    if (!this.$store.dispatch("authenticate")) {
       this.$router.push("/login");
     }
-  },
-  async beforeMount() {
     await this.getDayData();
   },
 });
