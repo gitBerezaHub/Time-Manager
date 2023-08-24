@@ -22,7 +22,7 @@ pipeline {
         }
         stage("Build and up") {
             steps {
-                sh 'docker-compose -f docker-compose.prod.yml -p ${gitBranch} up -d --build --remove-orphans'
+                sh 'docker-compose -f docker-compose.prod.yml -p ${env.PROJECT_NAME} up -d --build --remove-orphans'
             }
         }
     }
