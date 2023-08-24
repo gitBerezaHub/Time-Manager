@@ -1,5 +1,4 @@
 version: '3'
-project_name: "${PROJECT_NAME}"
 services:
   nginx:
     build: ./

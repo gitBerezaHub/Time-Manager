@@ -12,6 +12,9 @@ pipeline {
                     if (gitBranch == "main") {
                         env.PROJECT_NAME = "time-manager-frontend"
                     } else {
+                        if (gitBranch.startsWithAny('feature/') {
+                            gitBranch = gitBranch.takeAfter('feature/')
+                        }
                         env.PROJECT_NAME = "${gitBranch}-time-manager-frontend"
                     }
                 }
@@ -19,7 +22,7 @@ pipeline {
         }
         stage("Build and up") {
             steps {
-                sh 'docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans'
+                sh 'docker-compose -f docker-compose.prod.yml -p ${gitBranch} up -d --build --remove-orphans'
             }
         }
     }
