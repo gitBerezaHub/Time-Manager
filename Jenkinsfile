@@ -12,7 +12,7 @@ pipeline {
                     if (gitBranch == "main") {
                         env.PROJECT_NAME = "time-manager-frontend"
                     } else {
-                        if (gitBranch.startsWithAny('feature/') {
+                        if (gitBranch.startsWithAny('feature/')) {
                             gitBranch = gitBranch.takeAfter('feature/')
                         }
                         env.PROJECT_NAME = "${gitBranch}-time-manager-frontend"
