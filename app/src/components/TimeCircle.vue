@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -16,28 +16,28 @@ export default defineComponent({
 
   data() {
     return {
-      timer: -1,
+      timer: 0,
     };
   },
   props: {
     minutes: { type: Number, required: false },
-    minutesPerClick: Number,
+    minutesPerClick: {
+      type: Number,
+      default: 60,
+    },
   },
   methods: {
     pointerDown() {
-      if (this.minutes === null) {
+      if (this.minutes === undefined) {
         return;
       }
       this.timer = Math.floor(new Date().getTime());
-      if (
-        this.minutes !== null &&
-        this.minutes <= 24 * 60 - this.minutesPerClick
-      ) {
+      if (this.minutes <= 24 * 60 - this.minutesPerClick) {
         this.$emit("editMinutes", this.minutes + this.minutesPerClick);
       }
     },
     pointerUp() {
-      this.timer = false;
+      this.timer = 0;
     },
   },
   watch: {

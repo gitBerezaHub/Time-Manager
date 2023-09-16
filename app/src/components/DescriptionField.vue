@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -31,7 +31,9 @@ export default defineComponent({
     setPolySize() {
       let points = `0, 40 0, ${window.innerHeight} ${window.innerWidth}, ${window.innerHeight} ${window.innerWidth}, 0`;
       let poly = document.getElementById("poly");
-      poly.setAttribute("points", points);
+      if (poly !== null) {
+        poly.setAttribute("points", points);
+      }
     },
   },
   watch: {
