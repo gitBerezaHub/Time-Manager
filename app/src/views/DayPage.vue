@@ -1,5 +1,6 @@
 <template>
-  <button @click="logout()">logout</button>
+  <button class="sun" @click="isSunMenuShow = true">Sun</button>
+  <sun-menu v-if="isSunMenuShow" @click="isSunMenuShow = false"></sun-menu>
   <current-date @click="isTextareaShow = false"></current-date>
   <time-circle
     :minutes="minutes"
@@ -16,6 +17,7 @@
   <description-field
     v-else
     :default_text="text"
+    @close="isTextareaShow = false"
     @edit="editText"
   ></description-field>
 </template>
@@ -25,15 +27,17 @@ import { defineComponent } from "vue";
 import CurrentDate from "@/components/CurrentDate.vue";
 import TimeCircle from "@/components/TimeCircle.vue";
 import DescriptionField from "@/components/DescriptionField.vue";
+import SunMenu from "@/components/SunMenu.vue";
 import axios from "axios";
 
 export default defineComponent({
   name: "DayPage",
-  components: { DescriptionField, TimeCircle, CurrentDate },
+  components: { DescriptionField, TimeCircle, CurrentDate, SunMenu },
   data() {
     return {
       date: this.$route.params.date,
       isTextareaShow: false,
+      isSunMenuShow: false,
       minutes: null,
       text: "",
     };
@@ -84,6 +88,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.sun {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .sand-container {
   position: fixed;
   bottom: 0;

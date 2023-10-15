@@ -6,22 +6,16 @@
       </svg>
       <div class="container">
         <h1 class="done">Done</h1>
-        <textarea
-          v-model="text"
-          class="description-text"
-          placeholder="Write your done features here..."
-          rows="4"
-        ></textarea>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "DescriptionField",
+  name: "SunMenu",
   data() {
     return {
       text: this.default_text,
@@ -33,15 +27,13 @@ export default defineComponent({
   methods: {
     setPolySize() {
       let points = `
-          0, 40
-          0, ${window.innerHeight}
-          ${window.innerWidth}, ${window.innerHeight}
+          0, 0
+          0, ${window.innerHeight * 0.5}
+          ${window.innerWidth}, ${window.innerHeight * 0.45}
           ${window.innerWidth}, 0
       `;
       let poly = document.getElementById("poly");
-      if (poly !== null) {
-        poly.setAttribute("points", points);
-      }
+      poly.setAttribute("points", points);
     },
     close() {
       this.$emit("close");
@@ -76,41 +68,18 @@ export default defineComponent({
 .container {
   position: absolute;
   left: 25vw;
-  bottom: 0;
+  top: 0;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  .done {
-    margin-top: 16px;
-    font-size: 64px;
-    color: #244782;
-  }
-
-  .description-text {
-    resize: none;
-    border: none;
-    height: 25vh;
-    width: 50vw;
-    margin-top: 40px;
-    font-size: 24px;
-    color: #244782;
-  }
 }
 
 .background-poly {
   z-index: -1;
   position: fixed;
-  bottom: 0;
+  top: 0;
   width: 100vw;
-  height: calc(60vh - 100px);
-}
-
-textarea {
-  border: none;
-  background-color: transparent;
-  resize: none;
-  outline: none;
+  height: 50vh;
 }
 </style>
