@@ -6,6 +6,7 @@
       </svg>
       <div class="container">
         <h1 class="done">Done</h1>
+        <router-link to="/statistic/">Statistic</router-link>
       </div>
     </div>
   </div>
