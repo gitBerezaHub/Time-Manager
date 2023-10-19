@@ -1,5 +1,5 @@
 <template>
-  <router-view class="content" />
+  <router-view class="cont" />
 </template>
 
 <script>
@@ -33,7 +33,7 @@ body {
   height: 100%;
 }
 
-.content {
+.cont {
   max-width: 500px;
 }
 </style>

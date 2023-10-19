@@ -1,18 +1,25 @@
 <template>
-  <a @click="this.$router.go(-1)">НАЗАД</a><br />
+  <div class="background">
+    <h1>Statistic</h1>
+    <div class="content">
+      <a @click="this.$router.go(-1)">НАЗАД</a><br />
 
-  <label>Выберите дату: </label>
-  <input type="date" v-model="date" /><br />
+      <label>Выберите дату: </label>
+      <input v-model="date" type="date" />
 
-  <label>Выберите часть: </label>
-  <select v-model="part">
-    <option value="1">Первая</option>
-    <option value="2">Вторая</option></select
-  ><br />
+      <div>
+        <label>Выберите часть: </label>
+        <select v-model="part">
+          <option value="1">Первая</option>
+          <option value="2">Вторая</option>
+        </select>
+      </div>
 
-  <button @click="getStatistic">Показать статистику</button>
-  <h1>отработано часов - {{ minutes / 60 }}</h1>
-  <h1>надо деняк - {{ payment }}</h1>
+      <button @click="getStatistic">Показать статистику</button>
+      <h1>Часов: {{ minutes / 60 }}</h1>
+      <h1>ЗП: {{ payment }}₽</h1>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -53,4 +60,22 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped>
+.background {
+  color: #244782;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+}
+
+.cont {
+  color: #244782;
+  display: flex;
+  width: 80vw;
+  flex-direction: column;
+  background: #fff;
+}
+</style>
