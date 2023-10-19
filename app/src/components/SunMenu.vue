@@ -1,11 +1,13 @@
 <template>
   <div class="background" @click.self="close">
-    <div class="content">
+    <div class="cont">
       <svg class="background-poly">
         <polygon id="poly" fill="#fff" points="" />
       </svg>
       <div class="container">
-        <h1 class="done">Done</h1>
+        <h1 class="menu-title">Menu</h1>
+        <router-link class="menu-el" to="/statistic/">Statistic</router-link>
+        <p class="menu-el logout" @click="logout">Logout</p>
       </div>
     </div>
   </div>
@@ -25,6 +27,10 @@ export default defineComponent({
     default_text: { type: String, default: "" },
   },
   methods: {
+    async logout() {
+      this.$store.commit("logout");
+      this.$router.push("/login");
+    },
     setPolySize() {
       let points = `
           0, 0
@@ -67,9 +73,11 @@ export default defineComponent({
 
 .container {
   position: absolute;
-  left: 25vw;
-  top: 0;
-  margin-bottom: 10px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,5 +89,22 @@ export default defineComponent({
   top: 0;
   width: 100vw;
   height: 50vh;
+}
+
+.menu-el {
+  text-decoration: none;
+  color: #244782;
+  margin-top: 30px;
+  font-size: 32px;
+}
+
+.menu-title {
+  font-size: 64px;
+  color: #244782;
+  margin-top: 10px;
+}
+
+.logout {
+  color: red;
 }
 </style>

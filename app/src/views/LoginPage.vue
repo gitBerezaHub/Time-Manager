@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="cont">
     <p class="login-label" @click="setPolySize()">Login</p>
     <svg class="background-poly">
       <polygon id="poly" fill="#fff" points="" />
@@ -138,7 +138,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.content {
+.cont {
   display: flex;
   flex-direction: column;
   align-items: center;

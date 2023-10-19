@@ -44,10 +44,6 @@ export default defineComponent({
   },
 
   methods: {
-    async logout() {
-      this.$store.commit("logout");
-      this.$router.push("/login");
-    },
     async getDayData() {
       try {
         let dayNote = await axios.post(
