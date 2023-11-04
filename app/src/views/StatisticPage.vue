@@ -4,18 +4,17 @@
     <div class="content">
       <a @click="this.$router.go(-1)">НАЗАД</a><br />
 
-      <label>Выберите дату: </label>
-      <input v-model="date" type="date" />
+      <label>Выберите месяц: </label>
+      <input v-model="date" type="month" @change="getStatistic" />
 
       <div>
         <label>Выберите часть: </label>
-        <select v-model="part">
+        <select v-model="part" @change="getStatistic">
           <option value="1">Первая</option>
           <option value="2">Вторая</option>
         </select>
       </div>
 
-      <button @click="getStatistic">Показать статистику</button>
       <h1>Часов: {{ minutes / 60 }}</h1>
       <h1>ЗП: {{ payment }}₽</h1>
     </div>
@@ -30,15 +29,14 @@ export default defineComponent({
   name: "StatisticPage",
   data() {
     return {
-      date: 0,
-      part: 0,
+      date: new Date().toISOString().substr(0, 7),
+      part: (new Date().getDate() > 15) + 1,
       minutes: 0,
       payment: 0,
     };
   },
   methods: {
     async getStatistic() {
-      this.date = this.date.slice(0, -3);
       try {
         let res = await axios.get(
           this.$store.state.API_URL +
@@ -56,6 +54,9 @@ export default defineComponent({
         console.log("Error on load statistic");
       }
     },
+  },
+  mounted() {
+    this.getStatistic();
   },
 });
 </script>
