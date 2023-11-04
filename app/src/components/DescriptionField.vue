@@ -1,6 +1,6 @@
 <template>
   <div class="background" @click.self="close">
-    <div class="cont">
+    <div class="content">
       <svg class="background-poly">
         <polygon id="poly" fill="#fff" points="" />
       </svg>

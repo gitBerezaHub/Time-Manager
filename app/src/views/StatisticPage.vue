@@ -1,22 +1,31 @@
-<template>
-  <div class="background">
-    <h1>Statistic</h1>
-    <div class="content">
-      <a @click="this.$router.go(-1)">НАЗАД</a><br />
+<template class="background">
+  <div class="content">
+    <div class="header">
+      <a class="header__icon" @click="this.$router.go(-1)">&lt;</a><br />
+      <h1 class="header__title">Statistic</h1>
+    </div>
+    <div class="statistic__row">
+      <label class="statistic__item">month</label>
+      <input
+        v-model="date"
+        class="statistic__input"
+        type="month"
+        @change="getStatistic"
+      />
+    </div>
 
-      <label>Выберите месяц: </label>
-      <input v-model="date" type="month" @change="getStatistic" />
-
-      <div>
-        <label>Выберите часть: </label>
-        <select v-model="part" @change="getStatistic">
-          <option value="1">Первая</option>
-          <option value="2">Вторая</option>
-        </select>
-      </div>
-
-      <h1>Часов: {{ minutes / 60 }}</h1>
-      <h1>ЗП: {{ payment }}₽</h1>
+    <div class="statistic__row">
+      <label class="statistic__item">part</label>
+      <span class="statistic__item">first</span>
+    </div>
+    <h2 class="statistic__title">Summary</h2>
+    <div class="statistic__row">
+      <span class="statistic__item">hours</span>
+      <span class="statistic__item">{{ minutes / 60 }}</span>
+    </div>
+    <div class="statistic__row">
+      <span class="statistic__item">payment</span>
+      <span class="statistic__item">{{ payment }}₽</span>
     </div>
   </div>
 </template>
@@ -72,11 +81,56 @@ export default defineComponent({
   background: #fff;
 }
 
-.cont {
+.content {
   color: #244782;
   display: flex;
-  width: 80vw;
+  max-width: 600px;
+  padding: 0 20px;
   flex-direction: column;
   background: #fff;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+
+  &__icon {
+    font-size: 48px;
+    padding-right: 20px;
+  }
+
+  &__title {
+    font-size: 48px;
+  }
+}
+
+.statistic {
+  &__row {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__input {
+    font-size: 24px;
+    color: #244782;
+    border: none;
+    width: 230px;
+    padding: 0;
+  }
+
+  &__item {
+    font-size: 24px;
+    color: #244782;
+  }
+
+  &__title {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 36px;
+  }
 }
 </style>
