@@ -33,6 +33,9 @@ export default createStore({
   },
   actions: {
     async authenticate(context) {
+      if (!context.state.token) {
+        return false;
+      }
       try {
         await axios.get(context.state.API_URL + "/users/me", {
           headers: { Authorization: context.state.token },

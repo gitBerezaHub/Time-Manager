@@ -1,5 +1,5 @@
 <template>
-  <button class="sun" @click="isSunMenuShow = true">Sun</button>
+  <img alt="sun" class="sun" src="/img/sun.svg" @click="isSunMenuShow = true" />
   <sun-menu v-if="isSunMenuShow" @click="isSunMenuShow = false"></sun-menu>
   <current-date @click="isTextareaShow = false"></current-date>
   <time-circle
@@ -88,6 +88,8 @@ export default defineComponent({
   position: absolute;
   right: 0;
   top: 0;
+  padding-left: 10px;
+  padding-bottom: 10px;
 }
 
 .sand-container {

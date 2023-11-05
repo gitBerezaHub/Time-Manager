@@ -1,31 +1,35 @@
-<template class="background">
-  <div class="content">
-    <div class="header">
-      <a class="header__icon" @click="this.$router.go(-1)">&lt;</a><br />
-      <h1 class="header__title">Statistic</h1>
-    </div>
-    <div class="statistic__row">
-      <label class="statistic__item">month</label>
-      <input
-        v-model="date"
-        class="statistic__input"
-        type="month"
-        @change="getStatistic"
-      />
-    </div>
+<template>
+  <div class="background">
+    <div class="page">
+      <div class="header">
+        <a class="header__icon" @click="this.$router.go(-1)">&lt;</a><br />
+        <h1 class="header__title">Statistic</h1>
+      </div>
+      <div class="statistic__row">
+        <label class="statistic__item">month</label>
+        <input
+          v-model="date"
+          class="statistic__input"
+          type="month"
+          @input="getStatistic"
+        />
+      </div>
 
-    <div class="statistic__row">
-      <label class="statistic__item">part</label>
-      <span class="statistic__item">first</span>
-    </div>
-    <h2 class="statistic__title">Summary</h2>
-    <div class="statistic__row">
-      <span class="statistic__item">hours</span>
-      <span class="statistic__item">{{ minutes / 60 }}</span>
-    </div>
-    <div class="statistic__row">
-      <span class="statistic__item">payment</span>
-      <span class="statistic__item">{{ payment }}₽</span>
+      <div class="statistic__row">
+        <label class="statistic__item">part</label>
+        <span class="statistic__item" @click="change_part">{{
+          part ? "second" : "first"
+        }}</span>
+      </div>
+      <h2 class="statistic__title">Summary</h2>
+      <div class="statistic__row">
+        <span class="statistic__item">hours</span>
+        <span class="statistic__item">{{ hours }}</span>
+      </div>
+      <div class="statistic__row">
+        <span class="statistic__item">payment</span>
+        <span class="statistic__item">{{ payment }}₽</span>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +43,7 @@ export default defineComponent({
   data() {
     return {
       date: new Date().toISOString().substr(0, 7),
-      part: (new Date().getDate() > 15) + 1,
+      part: new Date().getDate() > 15,
       minutes: 0,
       payment: 0,
     };
@@ -47,21 +51,35 @@ export default defineComponent({
   methods: {
     async getStatistic() {
       try {
+        this.minutes = "-";
+        this.payment = "-";
         let res = await axios.get(
           this.$store.state.API_URL +
             "/notes/me/summary/" +
             this.date +
             "/" +
-            this.part,
+            (this.part + 1),
           { headers: { Authorization: this.$store.state.token } }
         );
         this.minutes = res.data.minutes;
         this.payment = res.data.payment;
-        console.log(this.minutes);
-        console.log(this.payment);
       } catch (e) {
-        console.log("Error on load statistic");
+        this.minutes = "-";
+        this.payment = "-";
       }
+    },
+    change_part() {
+      this.part = !this.part;
+      this.getStatistic();
+    },
+  },
+  computed: {
+    hours() {
+      let hours = Math.floor(this.minutes / 60);
+      if (isNaN(hours)) {
+        hours = "-";
+      }
+      return hours;
     },
   },
   mounted() {
@@ -77,17 +95,19 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  height: 100vh;
-  background: #fff;
+  background: #bfe0f3;
 }
 
-.content {
+.page {
   color: #244782;
   display: flex;
-  max-width: 600px;
+  width: 100%;
+  margin: 0 20px;
+  max-width: 500px;
   padding: 0 20px;
   flex-direction: column;
   background: #fff;
+  min-height: 100vh;
 }
 
 .header {
@@ -102,7 +122,14 @@ export default defineComponent({
   }
 
   &__title {
+    text-align: center;
     font-size: 48px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
   }
 }
 
@@ -115,10 +142,10 @@ export default defineComponent({
   }
 
   &__input {
+    text-align: right;
     font-size: 24px;
     color: #244782;
     border: none;
-    width: 230px;
     padding: 0;
   }
 

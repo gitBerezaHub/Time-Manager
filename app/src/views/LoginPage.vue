@@ -122,9 +122,10 @@ export default defineComponent({
       this.checkPasswordField();
     },
   },
-  beforeMount() {
+  beforeCreate() {
     if (this.$store.getters.isLogin) {
-      this.pushToDayPage();
+      const date = new Date().toISOString().split("T")[0];
+      this.$router.push("/me/" + date);
     }
   },
   mounted() {
