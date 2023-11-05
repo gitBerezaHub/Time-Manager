@@ -1,6 +1,5 @@
 <template>
-  <h1 v-if="loading" class="loading">Loading...</h1>
-  <router-view v-if="!loading" class="content" />
+  <router-view class="content" />
 </template>
 
 <script>
@@ -9,19 +8,12 @@ export default {
   data() {
     return {
       date: "",
-      loading: false,
     };
   },
   beforeCreate() {
     this.$store.commit("initialiseVars");
 
-    this.loading = true;
-    console.log("here", this.loading);
-    const is_authenticate = this.$store.dispatch("authenticate");
-    this.loading = false;
-    console.log("gere", this.loading);
-
-    if (!is_authenticate) {
+    if (!this.$store.dispatch("authenticate")) {
       this.$router.push("/login");
     }
     if (this.$route.path === "/") {
